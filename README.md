@@ -51,3 +51,11 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 > 截至最新一次提交，暂时没有完成 Flask 后端建设
 
 当前，仅需下载 `static/` 文件夹和 `index.html` 即可本地预览网页。并且可以尝试 5 个示例
+
+## 预览效果
+![login_image](https://github.com/user-attachments/assets/efa9325f-6f15-467f-beaf-6a0bd80344a1)
+
+![info_review_image](https://github.com/user-attachments/assets/22091d71-4239-4745-b3fa-9c01c0435e6b)
+
+![comfirm_image](https://github.com/user-attachments/assets/354cf4f8-1e16-4ceb-9410-d37df374a8f2)
+
