@@ -14,6 +14,8 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 >
 > This project **shall not** be used in any scenarios where safety is required. It is only applicable to stable and controllable internal environments.
 >
+> This project is currently Chinese(simplified) only.
+> 
 > 这个项目**不应当**用于任何对安全有要求的场景，仅适用于稳定可控的内部环境。
 
 
