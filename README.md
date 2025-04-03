@@ -31,7 +31,7 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 ├── static/			# 静态文件
 │	├── styles.css
 │   └── script.js
-├── template/			# 网页页面
+├── templates/			# 网页页面
 │	├── index.html
 ├── .git/
 └── .gitignore
