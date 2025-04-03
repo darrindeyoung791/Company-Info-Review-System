@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业信息审核系统 - 登录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div id="login-app">
+        <div class="auth-container">
+            <div class="logo">
+                <span class="material-icons">verified_user</span>
+                <h1>NCNU 企业信息审核系统</h1>
+            </div>
+            <div class="auth-form">
+                <div class="text-field">
+                    <input type="password" id="password" placeholder=" " inputmode="ascii" lang="en" autocomplete="off">
+                    <label for="password">输入访问密码</label>
+                    <span class="material-icons visibility" id="toggle-password">visibility_off</span>
+                </div>
+                <button id="login-btn" class="button primary">
+                    <span class="material-icons">login</span>
+                    <span>进入系统</span>
+                </button>
+                <div id="error-message" class="error-message"></div>
+                <div id="attempts-counter" class="attempts-counter"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/login.js"></script>
+</body>
+</html>
