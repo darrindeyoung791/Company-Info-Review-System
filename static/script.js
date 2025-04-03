@@ -1,48 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // 模拟数据 - 实际应用中应从后端获取
-    const mockCompanies = [
-        {
-            id: 1,
-            name: '腾飞科技有限公司',
-            location: '北京市海淀区中关村大街1号',
-            license: '91110108MA1234ABCD',
-            isReviewed: 0,
-            isVerified: 0
-        },
-        {
-            id: 2,
-            name: '蓝天餐饮集团',
-            location: '上海市浦东新区张江高科园区',
-            license: '91310115MA6789EFGH',
-            isReviewed: 0,
-            isVerified: 0
-        },
-        {
-            id: 3,
-            name: '星辰教育咨询',
-            location: '广州市天河区珠江新城',
-            license: '91440101MA2468JKLM',
-            isReviewed: 0,
-            isVerified: 0
-        },
-        {
-            id: 4,
-            name: '名字特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长的公司',
-            location: '名字特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长的地点',
-            license: '91510100MA1357NPQR',
-            isReviewed: 0,
-            isVerified: 0
-        },
-        {
-            id: 5,
-            name: '闪电物流有限公司',
-            location: '深圳市南山区科技园',
-            license: '91440300MA9876STUV',
-            isReviewed: 0,
-            isVerified: 0
-        }
-    ];
-
     // DOM 元素
     const authScreen = document.getElementById('auth-screen');
     const reviewScreen = document.getElementById('review-screen');
@@ -68,21 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const completeDialog = document.getElementById('complete-dialog');
     const closeBtn = document.getElementById('close-btn');
-    const searchMenu = document.getElementById('search-menu');
 
     // 状态变量
     let currentCompanyIndex = 0;
     let companies = [];
-    let failedAttempts = 0;
-    let lastFailedTime = 0;
     let currentAction = null; // 'approve' or 'reject'
-    let currentSearchType = '';
-    let currentSearchText = '';
-
-    // 创建工具提示元素
-    const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    document.body.appendChild(tooltip);
 
     // 初始化
     initEventListeners();
@@ -107,10 +53,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // 对话框按钮事件
         confirmBtn.addEventListener('click', confirmAction);
         cancelBtn.addEventListener('click', cancelAction);
-        closeBtn.addEventListener('click', () => completeDialog.classList.add('hidden'));
+        closeBtn.addEventListener('click', () => {
+            completeDialog.classList.add('hidden');
+            // 重新加载未审核的公司
+            loadCompanies();
+        });
 
-        // 复制和查询功能
-        document.addEventListener('click', handleCopyAndSearchActions);
+        // 复制功能
+        document.addEventListener('click', handleCopyAction);
     }
 
     function togglePasswordVisibility() {
@@ -126,58 +76,86 @@ document.addEventListener('DOMContentLoaded', function () {
     function attemptLogin() {
         const password = passwordInput.value.trim();
 
-        // 检查是否被锁定
-        if (checkLoginLock()) return;
-
-        // 验证密码 - 实际应用中应与后端验证
-        if (password === 'admin123') {
-            handleSuccessfulLogin();
-        } else {
-            handleFailedLogin();
-        }
-    }
-
-    function checkLoginLock() {
-        if (failedAttempts >= 10) {
-            const now = Date.now();
-            const timeSinceLastFail = (now - lastFailedTime) / (1000 * 60); // 分钟
-
-            if (timeSinceLastFail < 60) {
-                const remainingTime = Math.ceil(60 - timeSinceLastFail);
-                errorMessage.textContent = `尝试次数过多，请${remainingTime}分钟后再试`;
-                return true;
-            } else {
-                // 一小时已过，重置计数器
-                failedAttempts = 0;
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `password=${encodeURIComponent(password)}`
+        })
+        .then(response => {
+            if (response.status === 429) {
+                // 尝试次数过多
+                return response.json().then(data => {
+                    throw new Error(data.message);
+                });
             }
-        }
-        return false;
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                handleSuccessfulLogin();
+            } else {
+                throw new Error(data.message || '登录失败');
+            }
+        })
+        .catch(error => {
+            errorMessage.textContent = error.message;
+            if (error.message.includes('尝试次数')) {
+                attemptsCounter.textContent = '';
+            } else {
+                // 显示剩余尝试次数
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `password=check_attempts`  // 特殊值仅用于获取尝试次数
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.remaining_attempts !== undefined) {
+                        attemptsCounter.textContent = `剩余尝试次数: ${data.remaining_attempts}`;
+                    }
+                });
+            }
+        });
     }
 
     function handleSuccessfulLogin() {
         authScreen.classList.add('hidden');
         reviewScreen.classList.remove('hidden');
-
-        // 加载企业数据 - 实际应用中应从后端获取
-        companies = [...mockCompanies];
-        updateCompanyDisplay();
-
+        
         // 重置密码输入状态
         passwordInput.value = '';
         errorMessage.textContent = '';
-        failedAttempts = 0;
         attemptsCounter.textContent = '';
+        
+        // 加载企业数据
+        loadCompanies();
     }
 
-    function handleFailedLogin() {
-        failedAttempts++;
-        lastFailedTime = Date.now();
-        errorMessage.textContent = '密码错误，请重试';
-        attemptsCounter.textContent = `剩余尝试次数: ${10 - failedAttempts}`;
-
-        if (failedAttempts >= 10) {
-            errorMessage.textContent = '尝试次数过多，请一小时后重试';
-        }
+    function loadCompanies() {
+        fetch('/api/companies')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    companies = data.companies;
+                    currentCompanyIndex = 0;
+                    
+                    if (companies.length > 0) {
+                        updateCompanyDisplay();
+                    } else {
+                        showCompleteDialog();
+                    }
+                } else {
+                    throw new Error(data.message || '无法加载企业数据');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showSnackbar(error.message);
+            });
     }
 
     function updateCompanyDisplay() {
@@ -187,9 +165,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const company = companies[currentCompanyIndex];
-        companyName.textContent = company.name;
-        companyLocation.textContent = company.location;
-        companyLicense.textContent = company.license;
+        companyName.textContent = company.company_name;
+        companyLocation.textContent = company.company_location;
+        companyLicense.textContent = company.company_LicenseNumber;
 
         // 更新进度
         progressText.textContent = `${currentCompanyIndex + 1}/${companies.length}`;
@@ -225,18 +203,30 @@ document.addEventListener('DOMContentLoaded', function () {
     function confirmAction() {
         confirmDialog.classList.add('hidden');
 
-        // 实际应用中应向后端发送请求更新审核状态
-        if (currentAction === 'approve') {
-            companies[currentCompanyIndex].isReviewed = 1;
-            companies[currentCompanyIndex].isVerified = 1;
-        } else {
-            companies[currentCompanyIndex].isReviewed = 1;
-            companies[currentCompanyIndex].isVerified = 0;
-        }
-
-        // 移动到下一家企业
-        currentCompanyIndex++;
-        updateCompanyDisplay();
+        const companyId = companies[currentCompanyIndex].company_id;
+        const isVerified = currentAction === 'approve';
+        
+        fetch(`/api/companies/${companyId}/review`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ is_verified: isVerified })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 移动到下一家企业
+                currentCompanyIndex++;
+                updateCompanyDisplay();
+            } else {
+                throw new Error(data.message || '更新审核状态失败');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showSnackbar(error.message);
+        });
     }
 
     function cancelAction() {
@@ -247,77 +237,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function showCompleteDialog() {
         completeDialog.classList.remove('hidden');
         closeBtn.focus();
-
     }
 
-    // 添加新的键盘事件处理函数
-    function handleDialogKeyEvents(e) {
-        // 只有在确认对话框显示时才处理这些按键
-        if (confirmDialog.classList.contains('hidden')) return;
-
-        switch (e.key) {
-            case 'Enter':
-                e.preventDefault();
-                confirmAction();
-                break;
-            case 'Escape':
-                e.preventDefault();
-                cancelAction();
-                break;
-        }
-    }
-    function showTooltip(element, message) {
-        const rect = element.getBoundingClientRect();
-        tooltip.textContent = message;
-        tooltip.style.left = `${rect.left + rect.width / 2}px`;
-        tooltip.style.top = `${rect.top - 30}px`;
-        tooltip.style.transform = 'translateX(-50%)';
-        tooltip.classList.add('show');
-
-        setTimeout(() => {
-            tooltip.classList.remove('show');
-        }, 2000);
-    }
-
-    function handleCopyAndSearchActions(e) {
-        // 复制功能
-        if (e.target.closest('.copy-btn')) {
-            handleCopyAction(e);
-            return;
-        }
-
-        // 查询功能
-        if (e.target.closest('.search-btn')) {
-            handleSearchAction(e);
-            return;
-        }
-
-        // 查询菜单项
-        if (e.target.closest('.menu-item')) {
-            handleSearchMenuItem(e);
-            return;
-        }
-
-        // 点击外部关闭菜单
-        if (!e.target.closest('.search-btn') && !e.target.closest('.menu')) {
-            searchMenu.classList.add('hidden');
-        }
-    }
-
-    // 添加显示snackbar的函数
-    function showSnackbar(message) {
-        const snackbar = document.getElementById('snackbar');
-        if (message) {
-            snackbar.querySelector('span:not(.material-icons)').textContent = message;
-        }
-        snackbar.classList.add('show');
-        setTimeout(() => {
-            snackbar.classList.remove('show');
-        }, 3000);
-    }
-
-    // 修改复制功能
     function handleCopyAction(e) {
+        if (!e.target.closest('.copy-btn')) return;
+        
         const button = e.target.closest('.copy-btn');
         const targetId = button.getAttribute('data-target');
         const targetElement = document.getElementById(targetId);
@@ -345,15 +269,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.removeChild(textarea);
     }
 
-    // 修改搜索功能
+    // 搜索功能
     document.addEventListener('click', function (e) {
-        // 复制功能
-        if (e.target.closest('.copy-btn')) {
-            handleCopyAction(e);
-            return;
-        }
-
-        // 搜索功能
         if (e.target.closest('.search-link')) {
             e.preventDefault();
             const link = e.target.closest('.search-link');
@@ -393,7 +310,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
             }
         } else if (type === 'map') {
-            // 统一使用百度地图
             url = `https://map.baidu.com/search/${encodedText}`;
         }
 
@@ -402,4 +318,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function showSnackbar(message) {
+        const snackbar = document.getElementById('snackbar');
+        if (message) {
+            snackbar.querySelector('span:not(.material-icons)').textContent = message;
+        }
+        snackbar.classList.add('show');
+        setTimeout(() => {
+            snackbar.classList.remove('show');
+        }, 3000);
+    }
 });
