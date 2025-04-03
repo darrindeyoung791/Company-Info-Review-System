@@ -1,8 +1,8 @@
-# Company Info Review System for NCNU
+# Company Info Review System for NCNU (Not yet completed)
 
 This system is intended for internal use within NCNU to facilitate the visualization and automated review of enterprise information. It is built with a MySQL database, a Flask backend, and a straightforward web interface using HTML, CSS, and JavaScript.
 
-# NCNU 企业信息审核系统
+# NCNU 企业信息审核系统（开发中）
 
 此系统用于 NCNU 内部人员可视化自动化审核企业信息。使用 MySQL 数据库和 Flask 后端，以及使用简易的 HTML、CSS、JS 制作的网页界面。
 
@@ -45,7 +45,7 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 
 当前，仅需下载 `static/` 文件夹和 `index.html` 即可本地预览网页。并且可以尝试 5 个示例。
 
-要部署 Flask 后端，请安装 Python 3.8（在作者本人的环境下使用的是 Python 3.9）, 更新 pip：
+要部署 Flask 后端，请安装 Python 3.8（在作者本人的环境下使用的是 Windows 下的 Python 3.9）, 更新 pip：
 
 ```bash
 pip install --upgrade pip
@@ -59,7 +59,36 @@ pip install -r requirements.txt
 
 当然，部署时请考虑是否需要使用 Python 虚拟环境。
 
-[未完成]
+```bash
+# 创建项目目录
+mkdir company_review_system
+cd company_review_system
+
+# 创建虚拟环境
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# 或 venv\Scripts\activate  # Windows
+
+# 安装依赖
+pip install -r requirements.txt
+```
+
+配置环境变量
+
+```
+MYSQL_HOST=localhost
+MYSQL_USER=your_username
+MYSQL_PASSWORD=your_password
+MYSQL_DB=wechat_app
+ADMIN_PASSWORD=your_admin_password
+SECRET_KEY=your_secret_key
+```
+
+运行应用
+
+```
+python app.py
+```
 
 ## 预览效果
 
