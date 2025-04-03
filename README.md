@@ -52,7 +52,21 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 >
 > 截至最新一次提交，暂时没有完成 Flask 后端建设
 
-当前，仅需下载 `static/` 文件夹和 `index.html` 即可本地预览网页。并且可以尝试 5 个示例
+当前，仅需下载 `static/` 文件夹和 `index.html` 即可本地预览网页。并且可以尝试 5 个示例。
+
+要部署 Flask 后端，请安装 Python 3.8, 更新 pip：
+```bash
+pip install --upgrade pip
+```
+
+安装依赖：
+```bash
+pip install -r requirements.txt
+```
+
+当然，部署时请考虑是否需要使用 Python 虚拟环境。
+
+[未完成]
 
 ## 预览效果
 ![login_image](https://github.com/user-attachments/assets/efa9325f-6f15-467f-beaf-6a0bd80344a1)
