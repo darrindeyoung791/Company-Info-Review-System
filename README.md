@@ -32,7 +32,7 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 │	├── styles.css
 │   └── script.js
 ├── template/			# 网页页面
-│	├── index.html	
+│	├── index.html
 ├── .git/
 └── .gitignore
 ```
@@ -45,7 +45,7 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 
 当前，仅需下载 `static/` 文件夹和 `index.html` 即可本地预览网页。并且可以尝试 5 个示例。
 
-要部署 Flask 后端，请安装 Python 3.8, 更新 pip：
+要部署 Flask 后端，请安装 Python 3.8（在作者本人的环境下使用的是 Python 3.9）, 更新 pip：
 
 ```bash
 pip install --upgrade pip
