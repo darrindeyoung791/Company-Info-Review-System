@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-from functools import wraps  # 添加导入
+from functools import wraps
 from flask_mysqldb import MySQL
 import time
 from config import Config
