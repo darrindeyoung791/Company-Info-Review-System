@@ -35,8 +35,8 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 /company_review_system
 ├── app.py                	# 主应用文件
 ├── config.py             	# 配置文件
-├── requirements.txt		# 依赖文件
-├── static/					# 静态文件
+├── requirements.txt		    # 依赖文件
+├── static/					        # 静态文件
 │	├── styles.css			
 │   └── script.js			
 ├── index.html				
