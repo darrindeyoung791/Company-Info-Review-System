@@ -18,9 +18,10 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 ## 特性
 
 - 流式布局，适应各类显示设备
+- （仿）Material Design 3 风格界面
 - 前端单用户密码验证
 - 支持审核全流程键盘操作
-- 快速复制和查询
+- 快速复制和多来源查询
 
 ## 文件结构（包含 todo）
 
