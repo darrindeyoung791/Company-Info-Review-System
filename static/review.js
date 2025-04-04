@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 let query = '';
                 
                 if (type === 'company') {
-                    query = company.company_name;
+                    query = company.company_name || '';
                 } else if (type === 'license') {
-                    query = company.company_LicenseNumber;
+                    query = company.company_LicenseNumber || '';
                 } else if (type === 'map') {
-                    query = company.company_location;
+                    query = company.company_location || '';
                 }
                 
                 if (site === 'baidu') {
-                    link.href = `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`;
+                    link.href = type === 'map' ? `https://map.baidu.com/search/${encodeURIComponent(query)}` : `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`;
                 } else if (site === 'bing') {
                     link.href = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
                 } else if (site === 'qichacha') {
@@ -173,5 +173,18 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             showConfirmDialog(false);
         }
+    });
+
+    // 搜索链接点击事件
+    document.querySelectorAll('.search-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = link.href;
+            if (url) {
+                window.open(url, '_blank');
+            } else {
+                showSnackbar('信息不完整，无法搜索');
+            }
+        });
     });
 });
