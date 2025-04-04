@@ -1,3 +1,4 @@
+
 # Company Info Review System for NCNU (Not yet completed)
 
 This system is intended for internal use within NCNU to facilitate the visualization and automated review of enterprise information. It is built with a MySQL database, a Flask backend, and a straightforward web interface using HTML, CSS, and JavaScript.
@@ -25,16 +26,23 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 
 ```
 /company_review_system
-├── app.py                	# 主应用文件
-├── config.py             	# 配置文件
-├── requirements.txt		# 依赖文件
-├── static/			# 静态文件
-│	├── styles.css
-│   └── script.js
-├── templates/			# 网页页面
-│	├── index.html
-├── .git/
+├── app.py                 # 主应用文件
+├── config.py              # 配置文件
+├── LICENSE
+├── README.md
+├── requirements.txt       # 依赖文件
+├── static/                # 静态文件
+│   ├── styles.css         # 样式文件
+│   ├── login.js           # 登录页面的JavaScript文件
+│   ├── review.js          # 审核页面的JavaScript文件
+│   └── script.js          # 已弃用
+├── templates/             # 网页页面
+│   ├── login.html         # 登录页面
+│   ├── review.html        # 审核页面
+│   └── index.html         # 已弃用
+├── .env
 └── .gitignore
+
 ```
 
 ## 部署
