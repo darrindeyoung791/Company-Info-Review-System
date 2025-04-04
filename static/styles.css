@@ -165,6 +165,11 @@ body {
     color: var(--on-primary);
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
 }
 
 .app-bar-content {
@@ -173,6 +178,28 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.app-bar .actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#logout-btn {
+    background-color: transparent;
+    color: var(--on-primary);
+    padding: 0.5rem;
+    min-width: 40px;
+    height: 40px;
+}
+
+#logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#logout-btn .material-icons {
+    font-size: 20px;
 }
 
 .progress-indicator {
@@ -198,7 +225,7 @@ body {
 
 .review-container {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 6.5rem auto 2rem;  /* 从5rem增加到6.5rem，给顶部多留些空间 */
     padding: 0 1rem;
 }
 
@@ -207,6 +234,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    width: 100%;
 }
 
 .card-header {
