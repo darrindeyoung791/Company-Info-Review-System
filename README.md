@@ -26,8 +26,17 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 
 ## 预览效果
 
+![image](https://github.com/user-attachments/assets/beb0d301-f2bb-4705-b4b0-59423452c89e)
 
+![image](https://github.com/user-attachments/assets/43c88ae2-a38c-4f27-9205-bdb5ff66eedc)
 
+![image](https://github.com/user-attachments/assets/639bd92a-43f2-4e2e-897f-0fa66bb74958)
+
+![image](https://github.com/user-attachments/assets/342058bf-7e40-43e0-ba84-23788a880eae)
+
+![image](https://github.com/user-attachments/assets/d5a8cc0e-ee5c-4838-aba4-17d4fdaffa65)
+
+![image](https://github.com/user-attachments/assets/000a3745-95f9-412c-b46d-8c3bcbbdc2a4)
 
 ## 文件结构（包含 todo）
 
