@@ -38,7 +38,7 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 
 ![image](https://github.com/user-attachments/assets/000a3745-95f9-412c-b46d-8c3bcbbdc2a4)
 
-## 文件结构（包含 todo）
+## 文件结构
 
 ```
 /company_review_system
