@@ -13,11 +13,16 @@
         <header class="app-bar">
             <div class="app-bar-content">
                 <h1>企业审核</h1>
-                <div class="progress-indicator">
-                    <span id="progress-text">0/0</span>
-                    <div class="progress-bar">
-                        <div id="progress-fill" class="progress-fill"></div>
+                <div class="actions">
+                    <div class="progress-indicator">
+                        <span id="progress-text">0/0</span>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
                     </div>
+                    <button id="logout-btn" class="button secondary" title="退出登录">
+                        <span class="material-icons">logout</span>
+                    </button>
                 </div>
             </div>
         </header>
@@ -125,7 +130,7 @@
                 <h3>审核完成</h3>
                 <p>您已完成所有企业的审核工作。</p>
                 <div class="dialog-actions">
-                    <button id="close-btn" class="button primary">关闭</button>
+                    <button id="close-btn" class="button primary">关闭标签页</button>
                 </div>
             </div>
         </div>

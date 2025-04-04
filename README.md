@@ -1,9 +1,8 @@
-
-# Company Info Review System for NCNU (Not yet completed)
+# Company Info Review System for NCNU 
 
 This system is intended for internal use within NCNU to facilitate the visualization and automated review of enterprise information. It is built with a MySQL database, a Flask backend, and a straightforward web interface using HTML, CSS, and JavaScript.
 
-# NCNU 企业信息审核系统（开发中）
+# NCNU 企业信息审核系统
 
 此系统用于 NCNU 内部人员可视化自动化审核企业信息。使用 MySQL 数据库和 Flask 后端，以及使用简易的 HTML、CSS、JS 制作的网页界面。
 
@@ -15,6 +14,8 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 >
 > 这个项目**不应当**用于任何对安全有要求的场景，仅适用于稳定可控的内部环境。
 
+
+
 ## 特性
 
 - 流式布局，适应各类显示设备
@@ -22,6 +23,11 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 - 前端单用户密码验证
 - 支持审核全流程键盘操作
 - 快速复制和多来源查询
+
+## 预览效果
+
+
+
 
 ## 文件结构（包含 todo）
 
@@ -35,74 +41,81 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 ├── static/                # 静态文件
 │   ├── styles.css         # 样式文件
 │   ├── login.js           # 登录页面的JavaScript文件
-│   ├── review.js          # 审核页面的JavaScript文件
-│   └── script.js          # 已弃用
+│   └── review.js          # 审核页面的JavaScript文件
 ├── templates/             # 网页页面
 │   ├── login.html         # 登录页面
-│   ├── review.html        # 审核页面
-│   └── index.html         # 已弃用
+│   └── review.html        # 审核页面
 ├── .env
 └── .gitignore
-
 ```
 
 ## 部署
 
-> [!NOTE]
->
-> 截至最新一次提交，暂时没有完成 Flask 后端建设
+### 1. 数据库配置
 
-当前，仅需下载 `static/` 文件夹和 `index.html` 即可本地预览网页。并且可以尝试 5 个示例。
+首先需要配置 MySQL 数据库：
 
-要部署 Flask 后端，请安装 Python 3.8（在作者本人的环境下使用的是 Windows 下的 Python 3.9）, 更新 pip：
+```sql
+# 创建数据库
+CREATE DATABASE wechat_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-```bash
-pip install --upgrade pip
+# 创建用户并授权
+CREATE USER 'flask_user'@'localhost' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON wechat_app.* TO 'flask_user'@'localhost';
+FLUSH PRIVILEGES;
+
+# 创建数据表
+USE wechat_app;
+CREATE TABLE company_info (
+    company_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(255) NOT NULL,
+    company_location VARCHAR(100),
+    company_LicenseNumber VARCHAR(255),
+    company_IsReviewed TINYINT(1) DEFAULT 0,
+    company_IsVerified TINYINT(1) DEFAULT 0
+);
 ```
 
-安装依赖：
+### 2. Python环境配置
+
+推荐使用虚拟环境进行部署：
 
 ```bash
-pip install -r requirements.txt
-```
-
-当然，部署时请考虑是否需要使用 Python 虚拟环境。
-
-```bash
-# 创建项目目录
-mkdir company_review_system
-cd company_review_system
-
-# 创建虚拟环境
+# 创建并激活虚拟环境
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-# 或 venv\Scripts\activate  # Windows
+# 或
+venv\Scripts\activate     # Windows
 
-# 安装依赖
+# 更新pip并安装依赖
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-配置环境变量
+### 3. 环境变量配置
 
-```
-MYSQL_HOST=localhost
-MYSQL_USER=your_username
-MYSQL_PASSWORD=your_password
-MYSQL_DB=wechat_app
-ADMIN_PASSWORD=your_admin_password
-SECRET_KEY=your_secret_key
+创建 `.env` 文件并设置以下配置：
+
+```ini
+# MySQL配置
+MYSQL_HOST="127.0.0.1"
+MYSQL_USER="flask_user"
+MYSQL_PASSWORD="123456"
+MYSQL_DB="wechat_app"
+MYSQL_PORT=3306
+
+# 安全配置
+SECRET_KEY="生成一个随机密钥"
+ADMIN_PASSWORD="设置管理员密码"
+
+# 登录限制配置
+MAX_LOGIN_ATTEMPTS=5
+LOGIN_LOCK_TIME=300
 ```
 
-运行应用
+### 4. 运行应用
 
-```
+```bash
+# 开发环境
 python app.py
 ```
-
-## 预览效果
-
-![login_image](https://github.com/user-attachments/assets/efa9325f-6f15-467f-beaf-6a0bd80344a1)
-
-![info_review_image](https://github.com/user-attachments/assets/22091d71-4239-4745-b3fa-9c01c0435e6b)
-
-![comfirm_image](https://github.com/user-attachments/assets/354cf4f8-1e16-4ceb-9410-d37df374a8f2)

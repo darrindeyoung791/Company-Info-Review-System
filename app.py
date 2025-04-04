@@ -1,10 +1,11 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from functools import wraps
-from flask_mysqldb import MySQL
 import time
 import logging
 from config import Config
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text  # 添加这行导入
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -17,8 +18,9 @@ app.config.from_object(Config)
 if not app.secret_key:
     raise ValueError("No SECRET_KEY set in Flask application config")
 
-# 初始化MySQL
-mysql = MySQL(app)
+# 初始化数据库
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{Config.MYSQL_USER}:{Config.MYSQL_PASSWORD}@{Config.MYSQL_HOST}:{Config.MYSQL_PORT}/{Config.MYSQL_DB}?charset=utf8mb4'
+db = SQLAlchemy(app)
 
 # 添加登录限制检查函数
 def check_login_restriction():
@@ -37,29 +39,6 @@ def check_login_restriction():
     
     return False
 
-# 数据库连接装饰器
-def with_db_connection(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        try:
-            cur = mysql.connection.cursor()
-            kwargs['cursor'] = cur
-            result = f(*args, **kwargs)
-            mysql.connection.commit()
-            return result
-        except Exception as e:
-            mysql.connection.rollback()
-            logger.error(f"Database error: {str(e)}")
-            return jsonify({
-                'success': False,
-                'message': '数据库操作失败',
-                'error': str(e)
-            }), 500
-        finally:
-            if 'cursor' in kwargs and kwargs['cursor']:
-                kwargs['cursor'].close()
-    return decorated_function
-
 # 登录状态检查装饰器
 def login_required(f):
     @wraps(f)
@@ -74,63 +53,94 @@ def login_required(f):
 def index():
     return redirect(url_for('review'))
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
-    if request.method == 'GET':
-        return render_template('login.html')
-    
     if session.get('logged_in'):
         return redirect(url_for('review'))
+    return render_template('login.html')
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    if session.get('logged_in'):
+        return jsonify({'success': True})
     
-    password = request.form.get('password', '').strip()
-    
-    if password == 'check_attempts':
-        remaining = app.config['MAX_LOGIN_ATTEMPTS'] - session.get('failed_attempts', 0)
-        return jsonify({'remaining_attempts': remaining})
-    
-    if check_login_restriction():
-        lock_time = app.config['LOGIN_LOCK_TIME'] - (int(time.time()) - session.get('last_failed_time', 0))
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'success': False,
+                'message': '无效的请求数据'
+            }), 400
+            
+        password = data.get('password', '').strip()
+        
+        # 添加调试日志
+        logger.info(f"Received password length: {len(password)}")
+        logger.info(f"Configured password length: {len(Config.ADMIN_PASSWORD)}")
+        
+        if check_login_restriction():
+            lock_time = app.config['LOGIN_LOCK_TIME'] - (int(time.time()) - session.get('last_failed_time', 0))
+            return jsonify({
+                'success': False,
+                'message': f'尝试次数过多，请 {lock_time} 秒后重试'
+            }), 429
+        
+        # 简单的字符串比较
+        if password == Config.ADMIN_PASSWORD:
+            session['logged_in'] = True
+            session.pop('failed_attempts', None)
+            session.pop('last_failed_time', None)
+            return jsonify({'success': True})
+        else:
+            session['failed_attempts'] = session.get('failed_attempts', 0) + 1
+            session['last_failed_time'] = int(time.time())
+            remaining = app.config['MAX_LOGIN_ATTEMPTS'] - session['failed_attempts']
+            return jsonify({
+                'success': False,
+                'message': f'密码错误，还剩 {remaining} 次尝试机会'
+            }), 401
+            
+    except Exception as e:
+        logger.error(f"登录失败: {str(e)}")
         return jsonify({
             'success': False,
-            'message': f'尝试次数过多，请 {lock_time} 秒后重试'
-        }), 429
-    
-    if check_password_hash(app.config['ADMIN_PASSWORD_HASH'], password):
-        session['logged_in'] = True
-        session['login_time'] = int(time.time())
-        session.pop('failed_attempts', None)
-        session.pop('last_failed_time', None)
-        return redirect(url_for('review'))
-    else:
-        session['failed_attempts'] = session.get('failed_attempts', 0) + 1
-        session['last_failed_time'] = int(time.time())
-        remaining = app.config['MAX_LOGIN_ATTEMPTS'] - session['failed_attempts']
-        return jsonify({
-            'success': False,
-            'message': f'密码错误，还剩 {remaining} 次尝试机会',
-            'remaining_attempts': remaining
-        }), 401
+            'message': '登录处理失败'
+        }), 500
 
 @app.route('/review')
 @login_required
 def review():
+    if 'current_company_index' not in session:
+        session['current_company_index'] = 0
     return render_template('review.html')
 
 @app.route('/api/companies')
 @login_required
-@with_db_connection
-def get_companies(cursor=None):
+def get_companies():
     try:
-        cursor.execute("""
-            SELECT company_id, company_name, company_location, 
-                   company_LicenseNumber, company_IsReviewed, company_IsVerified
+        logger.info("Fetching companies from database...")
+        
+        sql = text("""
+            SELECT 
+                company_id,
+                company_name,
+                company_location,
+                company_LicenseNumber,
+                company_IsReviewed,
+                company_IsVerified
             FROM company_info
             WHERE company_IsReviewed = 0
             ORDER BY company_id
         """)
         
-        columns = [column[0] for column in cursor.description]
-        companies = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        # 修改结果处理方式
+        result = db.session.execute(sql)
+        companies = [dict(row) for row in result.mappings().all()]
+        
+        # 添加更详细的日志
+        logger.info(f"Found {len(companies)} unreviewed companies")
+        if companies:
+            logger.info(f"First company data: {companies[0]}")
         
         return jsonify({
             'success': True,
@@ -139,22 +149,34 @@ def get_companies(cursor=None):
         })
     except Exception as e:
         logger.error(f"获取公司列表失败: {str(e)}")
-        raise
+        # 添加更详细的错误信息
+        logger.error(f"Error details: {type(e).__name__}")
+        return jsonify({
+            'success': False,
+            'message': '获取公司列表失败',
+            'error': str(e)
+        }), 500
 
 @app.route('/api/companies/<int:company_id>/review', methods=['POST'])
 @login_required
-@with_db_connection
-def review_company(company_id, cursor=None):
+def review_company(company_id):
     try:
         data = request.get_json()
         is_verified = data.get('is_verified', False)
         
-        cursor.execute("""
+        sql = text("""
             UPDATE company_info
             SET company_IsReviewed = 1,
-                company_IsVerified = %s
-            WHERE company_id = %s
-        """, (1 if is_verified else 0, company_id))
+                company_IsVerified = :is_verified
+            WHERE company_id = :company_id
+        """)
+        
+        db.session.execute(sql, {
+            'is_verified': 1 if is_verified else 0,
+            'company_id': company_id
+        })
+        
+        db.session.commit()
         
         return jsonify({
             'success': True,
@@ -163,8 +185,13 @@ def review_company(company_id, cursor=None):
             'is_verified': is_verified
         })
     except Exception as e:
+        db.session.rollback()
         logger.error(f"审核公司 {company_id} 失败: {str(e)}")
-        raise
+        return jsonify({
+            'success': False,
+            'message': '审核公司失败',
+            'error': str(e)
+        }), 500
 
 @app.route('/logout')
 def logout():

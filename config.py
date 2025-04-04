@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-from werkzeug.security import generate_password_hash
 
 load_dotenv()
 
@@ -15,13 +14,11 @@ class Config:
     if not SECRET_KEY:
         raise ValueError("No SECRET_KEY set in environment")
     
-    # 密码配置
-    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
+    # 修改密码配置处理
+    _raw_password = os.getenv('ADMIN_PASSWORD', '')
+    ADMIN_PASSWORD = _raw_password.split('#')[0].strip()  # 移除注释和空格
     if not ADMIN_PASSWORD:
         raise ValueError("No ADMIN_PASSWORD set in environment")
-    
-    # 密码哈希存储
-    ADMIN_PASSWORD_HASH = generate_password_hash(ADMIN_PASSWORD)
     
     # 登录限制配置
     MAX_LOGIN_ATTEMPTS = 5
@@ -34,6 +31,7 @@ class Config:
     if not MYSQL_PASSWORD:
         raise ValueError("No MYSQL_PASSWORD set in environment")
     MYSQL_DB = os.getenv('MYSQL_DB', 'wechat_app')
+    MYSQL_PORT = int(os.getenv('MYSQL_PORT', 3306))  # 添加这一行
     
     # MySQL连接池配置
     MYSQL_POOL_SIZE = 5
