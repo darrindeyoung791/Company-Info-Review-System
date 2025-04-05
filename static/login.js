@@ -28,9 +28,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // 密码哈希函数
+    async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+    }
+
     // 登录请求函数
-    function performLogin() {
+    async function performLogin() {
         const password = passwordInput.value.trim();
+        const hashedPassword = await hashPassword(password);
         
         // 发送登录请求到后端验证
         fetch('/api/login', {
@@ -38,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ password: password })
+            body: JSON.stringify({ password: hashedPassword })
         })
         .then(response => response.json())
         .then(data => {

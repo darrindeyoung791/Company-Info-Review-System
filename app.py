@@ -72,11 +72,11 @@ def api_login():
                 'message': '无效的请求数据'
             }), 400
             
-        password = data.get('password', '').strip()
+        password_hash = data.get('password', '').strip()
         
         # 添加调试日志
-        logger.info(f"Received password length: {len(password)}")
-        logger.info(f"Configured password length: {len(Config.ADMIN_PASSWORD)}")
+        logger.info(f"Received password hash length: {len(password_hash)}")
+        logger.info(f"Configured password hash length: {len(Config.ADMIN_PASSWORD)}")
         
         if check_login_restriction():
             lock_time = app.config['LOGIN_LOCK_TIME'] - (int(time.time()) - session.get('last_failed_time', 0))
@@ -85,8 +85,8 @@ def api_login():
                 'message': f'尝试次数过多，请 {lock_time} 秒后重试'
             }), 429
         
-        # 简单的字符串比较
-        if password == Config.ADMIN_PASSWORD:
+        # 比较哈希值
+        if password_hash == Config.ADMIN_PASSWORD:
             session['logged_in'] = True
             session.pop('failed_attempts', None)
             session.pop('last_failed_time', None)

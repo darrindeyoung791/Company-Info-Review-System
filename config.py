@@ -1,4 +1,5 @@
 import os
+import hashlib
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,8 +17,8 @@ class Config:
     
     # 修改密码配置处理
     _raw_password = os.getenv('ADMIN_PASSWORD', '')
-    ADMIN_PASSWORD = _raw_password.split('#')[0].strip()  # 移除注释和空格
-    if not ADMIN_PASSWORD:
+    ADMIN_PASSWORD = hashlib.sha256(_raw_password.encode()).hexdigest()
+    if not _raw_password:
         raise ValueError("No ADMIN_PASSWORD set in environment")
     
     # 登录限制配置
