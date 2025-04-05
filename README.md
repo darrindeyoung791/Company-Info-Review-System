@@ -1,4 +1,6 @@
-# Company Info Review System for NCNU 
+# Company Info Review System for NCNU
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This system is intended for internal use within NCNU to facilitate the visualization and automated review of enterprise information. It is built with a MySQL database, a Flask backend, and a straightforward web interface using HTML, CSS, and JavaScript.
 
@@ -14,13 +16,11 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 >
 > 这个项目**不应当**用于任何对安全有要求的场景，仅适用于稳定可控的内部环境。
 
-
-
 ## 特性
 
 - 流式布局，适应各类显示设备
 - （仿）Material Design 3 风格界面
-- 前端单用户密码验证
+- 单用户操作，不传输密码明文
 - 支持审核全流程键盘操作
 - 快速复制和多来源查询
 
