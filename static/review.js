@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     let companies = [];
     let currentIndex = 0;
+    let totalCompanies = 0;
+    let reviewedCompanies = 0;
     
     // 修改API路径
     fetch('/api/companies')
@@ -11,8 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            if (data.success && data.companies) {
+            if (data.success) {
                 companies = data.companies;
+                // 更新全局变量
+                totalCompanies = data.total;
+                reviewedCompanies = data.reviewed;
+                
                 updateProgress();
                 if (companies.length > 0) {
                     loadCompany(currentIndex);
@@ -65,19 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 更新进度条
     function updateProgress() {
-        if (!companies || companies.length === 0) {
+        if (!totalCompanies) {
             document.getElementById('progress-text').textContent = '0/0';
             document.getElementById('progress-fill').style.width = '0%';
             return;
         }
         
-        // 计算已审核的数量
-        const reviewed = currentIndex;
-        const total = companies.length;
-        const percent = (reviewed / total) * 100;
+        // 使用已审核总数而不是当前索引
+        const percent = (reviewedCompanies / totalCompanies) * 100;
         
         // 更新显示
-        document.getElementById('progress-text').textContent = `${reviewed}/${total}`;
+        document.getElementById('progress-text').textContent = `${reviewedCompanies}/${totalCompanies}`;
         document.getElementById('progress-fill').style.width = `${percent}%`;
     }
 
@@ -131,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.success) {
                 currentIndex++;
-                updateProgress(); // 在此处添加进度更新
+                reviewedCompanies++; // 增加已审核数量
+                updateProgress();
                 if (currentIndex < companies.length) {
                     loadCompany(currentIndex);
                 } else {

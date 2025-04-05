@@ -120,7 +120,16 @@ def get_companies():
     try:
         logger.info("Fetching companies from database...")
         
-        sql = text("""
+        # 获取统计信息
+        stats = db.session.execute(text("""
+            SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN company_IsReviewed = 1 THEN 1 ELSE 0 END) as reviewed
+            FROM company_info
+        """)).mappings().first()
+        
+        # 获取未审核的公司
+        result = db.session.execute(text("""
             SELECT 
                 company_id,
                 company_name,
@@ -131,26 +140,21 @@ def get_companies():
             FROM company_info
             WHERE company_IsReviewed = 0
             ORDER BY company_id
-        """)
+        """))
         
-        # 修改结果处理方式
-        result = db.session.execute(sql)
         companies = [dict(row) for row in result.mappings().all()]
         
-        # 添加更详细的日志
         logger.info(f"Found {len(companies)} unreviewed companies")
-        if companies:
-            logger.info(f"First company data: {companies[0]}")
         
         return jsonify({
             'success': True,
             'count': len(companies),
-            'companies': companies
+            'companies': companies,
+            'total': stats['total'],
+            'reviewed': stats['reviewed']
         })
     except Exception as e:
         logger.error(f"获取公司列表失败: {str(e)}")
-        # 添加更详细的错误信息
-        logger.error(f"Error details: {type(e).__name__}")
         return jsonify({
             'success': False,
             'message': '获取公司列表失败',
