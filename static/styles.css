@@ -42,7 +42,7 @@ body {
 
 /* 密码验证界面样式 */
 .auth-container {
-    max-width: 400px;
+    max-width: 600px;
     margin: auto;
     padding: 2rem;
     text-align: center;
