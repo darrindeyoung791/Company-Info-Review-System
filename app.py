@@ -5,7 +5,7 @@ import logging
 from config import Config
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text  # 添加这行导入
+from sqlalchemy import text
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
