@@ -50,6 +50,7 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 ├── README.md
 ├── requirements.txt       # 依赖文件
 ├── static/                # 静态文件
+│   ├── favicon.svg        # 标签页图片
 │   ├── styles.css         # 样式文件
 │   ├── login.js           # 登录页面的JavaScript文件
 │   └── review.js          # 审核页面的JavaScript文件
