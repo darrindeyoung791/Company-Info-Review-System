@@ -157,19 +157,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const dialog = document.getElementById('confirm-dialog');
         dialog.classList.remove('hidden');
         
+        // 添加一次性ESC监听器
+        const escListener = (e) => {
+            if (e.key === 'Escape') {
+                hideConfirmDialog();
+                document.removeEventListener('keydown', escListener);
+            }
+        };
+        document.addEventListener('keydown', escListener);
+        
         document.getElementById('confirm-title').textContent = isApproved ? '确认通过' : '确认不通过';
         document.getElementById('confirm-message').textContent = isApproved 
             ? '您确定要通过此企业的审核吗？' 
             : '您确定要不通过此企业的审核吗？';
         
-        // 自动聚焦到确认按钮
         const confirmBtn = document.getElementById('confirm-btn');
         confirmBtn.focus();
         
         confirmBtn.onclick = () => {
-            dialog.classList.add('hidden');
+            hideConfirmDialog();
             reviewCompany(isApproved);
         };
+    }
+
+    // 添加隐藏对话框函数
+    function hideConfirmDialog() {
+        document.getElementById('confirm-dialog').classList.add('hidden');
     }
 
     // 事件监听
@@ -182,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('cancel-btn').addEventListener('click', () => {
-        document.getElementById('confirm-dialog').classList.add('hidden');
+        hideConfirmDialog();
     });
 
     document.getElementById('close-btn').addEventListener('click', () => {
