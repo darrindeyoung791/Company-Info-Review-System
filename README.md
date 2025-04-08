@@ -67,6 +67,8 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 > [!CAUTION]
 >
 > 后期很可能引入多用户审批概念，此处的配置可能会在未来更新
+>
+> 数据库密码**不要设太简单**，后续所有密码使用 `123456` 仅作演示
 
 首先需要配置 MySQL 数据库：
 
@@ -107,7 +109,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-本人的开发环境是 Windows 11 23H2 下的 Python 3.9，如果在其他环境中部署出先错误，请提 issue 或者咨询 AI。
+本人的开发环境是 Windows 11 23H2 下的 Python 3.9，如果在其他环境中部署出现错误，请提 issue 或者咨询 AI。
 
 ### 3. 环境变量配置
 
