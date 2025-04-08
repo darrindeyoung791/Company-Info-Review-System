@@ -6,6 +6,8 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 
 # NCNU 企业信息审核系统
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 此系统用于 NCNU 内部人员可视化自动化审核企业信息。使用 MySQL 数据库和 Flask 后端，以及使用简易的 HTML、CSS、JS 制作的网页界面。
 
 > [!CAUTION]
@@ -62,6 +64,10 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 
 ### 1. 数据库配置
 
+> [!CAUTION]
+>
+> 后期很可能引入多用户审批概念，此处的配置可能会在未来更新
+
 首先需要配置 MySQL 数据库：
 
 ```sql
@@ -101,7 +107,13 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+本人的开发环境是 Windows 11 23H2 下的 Python 3.9，如果在其他环境中部署出先错误，请提 issue 或者咨询 AI。
+
 ### 3. 环境变量配置
+
+> [!CAUTION]
+>
+> 后期很可能引入多用户审批概念，此处的配置可能会在未来更新
 
 创建 `.env` 文件并设置以下配置：
 
@@ -128,3 +140,33 @@ LOGIN_LOCK_TIME=300
 # 开发环境
 python app.py
 ```
+
+### 5. 调整主题色
+
+在 `.\static\styles.css` 中的开头处有如下配置：
+
+```css
+:root {
+    --primary-color: rgb(66 94 145);
+    --on-primary: rgb(255 255 255);
+    --primary-container: rgb(215 226 255);
+    --on-primary-container: rgb(41 70 119);
+    --secondary-color: rgb(86 94 113);
+    --on-secondary: rgb(255 255 255);
+    --secondary-container: rgb(218 226 249);
+    --on-secondary-container: rgb(62 71 89);
+    --error-color: rgb(186 26 26);
+    --on-error: rgb(255 255 255);
+    --surface: rgb(249 249 255);
+    --on-surface: rgb(26 28 32);
+    --outline: rgb(116 119 127);
+    --surface-variant: rgb(224 226 236);
+    --on-surface-variant: rgb(68 71 78);
+}
+```
+
+可以使用 [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/) 和一张颜色合适的图片提取其主题色，并以 **Web (CSS)** 导出（Export）得到三种对比程度的亮色深色主题配色。
+
+更改 `.\static\styles.css` 中的颜色为对应的颜色即可，这个过程用 AI 处理会更方便。此处影响登录和审批页面的主题颜色。
+
+同时更改 `.\static\favicon.svg` 中更改 `fill="rgb(66 94 145)"`处的 RGB 数值为 `--primary-color` 的颜色。此处影响网站标签页的图标颜色。
