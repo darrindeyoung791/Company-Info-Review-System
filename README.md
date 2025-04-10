@@ -2,13 +2,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This system is intended for internal use within NCNU to facilitate the visualization and automated review of enterprise information. It is built with a MySQL database, a Flask backend, and a straightforward web interface using HTML, CSS, and JavaScript.
+A system designed for NCNU's internal operations, enabling enterprise information visualization and automated review through a MySQL database, Flask backend, and a lightweight web interface built with HTML, CSS, and JavaScript.
 
 # NCNU 企业信息审核系统
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-此系统用于 NCNU 内部人员可视化自动化审核企业信息。使用 MySQL 数据库和 Flask 后端，以及使用简易的 HTML、CSS、JS 制作的网页界面。
+一个用于 NCNU 内部人员使用的系统。使用MySQL数据库、Flask后端以及基于HTML、CSS和JavaScript构建的轻量级Web界面，实现企业信息的可视化自动化审核。
 
 > [!CAUTION]
 >
@@ -18,6 +18,8 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 >
 > 这个项目**不应当**用于任何对安全有要求的场景，仅适用于稳定可控的内部环境。
 
+
+
 ## 特性
 
 - 流式布局，适应各类显示设备
@@ -26,19 +28,17 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 - 支持审核全流程键盘操作
 - 快速复制和多来源查询
 
+
+
 ## 预览效果
 
 ![image](https://github.com/user-attachments/assets/beb0d301-f2bb-4705-b4b0-59423452c89e)
 
-![image](https://github.com/user-attachments/assets/43c88ae2-a38c-4f27-9205-bdb5ff66eedc)
-
 ![image](https://github.com/user-attachments/assets/639bd92a-43f2-4e2e-897f-0fa66bb74958)
-
-![image](https://github.com/user-attachments/assets/342058bf-7e40-43e0-ba84-23788a880eae)
 
 ![image](https://github.com/user-attachments/assets/d5a8cc0e-ee5c-4838-aba4-17d4fdaffa65)
 
-![image](https://github.com/user-attachments/assets/000a3745-95f9-412c-b46d-8c3bcbbdc2a4)
+
 
 ## 文件结构
 
@@ -61,20 +61,24 @@ This system is intended for internal use within NCNU to facilitate the visualiza
 └── .gitignore
 ```
 
+
+
 ## 部署
 
 ### 1. 数据库配置
 
-> [!CAUTION]
+> [!NOTE]
 >
 > 后期很可能引入多用户审批概念，此处的配置可能会在未来更新
->
-> 数据库密码**不要设太简单**，后续所有密码使用 `123456` 仅作演示
 
 首先需要配置 MySQL 数据库：
 
+> [!CAUTION]
+>
+> 数据库密码**不要设太简单**，后续所有密码使用 `123456` 仅作演示
+
 ```sql
-# 创建数据库
+# 创建数据库（这里使用wechat_app作为示例数据库）
 CREATE DATABASE wechat_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 # 创建用户并授权
@@ -94,34 +98,58 @@ CREATE TABLE company_info (
 );
 ```
 
+
+
 ### 2. Python环境配置
 
 推荐使用虚拟环境进行部署：
 
 ```bash
-# 创建并激活虚拟环境
+# 创建虚拟环境
 python -m venv venv
+
+# 激活虚拟环境
 source venv/bin/activate  # Linux/Mac
 # 或
-venv\Scripts\activate     # Windows
+.\\venv\scripts\activate  # Windows PowerShell
 
 # 更新pip并安装依赖
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-本人的开发环境是 Windows 11 23H2 下的 Python 3.9，如果在其他环境中部署出现错误，请提 issue 或者咨询 AI。
+当前开发环境是 Windows 11 23H2 下的 Python 3.9，如果在其他环境中部署出现错误，请提 issue 或者咨询 AI。
+
+> [!TIP]
+>
+> 若在 Windows PowerShell 初次激活 Python 虚拟环境，可能无法运行 `Activate.ps1` 并看到如下报错：
+>
+> ```
+> venv\Scripts\activate : 无法加载文件 venv\Scripts\Activate.ps1，因为在此系统上禁止运行脚本。
+> ```
+>
+> 要解决这个问题，使用管理员模式运行 PowerShell，输入：
+>
+> ```powershell
+> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+> ```
+>
+> 即可解决。
+>
+> 或者不使用虚拟环境直接全局安装这些库（**不推荐**）
+
+
 
 ### 3. 环境变量配置
 
-> [!CAUTION]
+> [!NOTE]
 >
 > 后期很可能引入多用户审批概念，此处的配置可能会在未来更新
 
 创建 `.env` 文件并设置以下配置：
 
 ```ini
-# MySQL配置
+# MySQL配置（MYSQL_PASSWORD为第一步设定的密码）
 MYSQL_HOST="127.0.0.1"
 MYSQL_USER="flask_user"
 MYSQL_PASSWORD="123456"
@@ -137,12 +165,18 @@ MAX_LOGIN_ATTEMPTS=5
 LOGIN_LOCK_TIME=300
 ```
 
+
+
 ### 4. 运行应用
 
 ```bash
 # 开发环境
 python app.py
 ```
+
+这时，使用浏览器访问 `127.0.0.1:5000` 即可访问系统
+
+
 
 ### 5. 调整主题色
 
