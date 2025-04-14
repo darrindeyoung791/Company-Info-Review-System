@@ -186,6 +186,20 @@ body {
     gap: 1rem;
 }
 
+.app-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.banner-logo {
+    height: 48px;  /* 与标题文字高度接近 */
+    width: auto;   /* 保持图片比例 */
+    object-fit: contain;
+    border-radius: 0%;
+}
+
 #logout-btn {
     background-color: transparent;
     color: var(--on-primary);
@@ -225,7 +239,7 @@ body {
 
 .review-container {
     max-width: 800px;
-    margin: 6.5rem auto 2rem;  /* 从5rem增加到6.5rem，给顶部多留些空间 */
+    margin: 10rem auto 2rem;  /* 从5rem增加到6.5rem，给顶部多留些空间 */
     padding: 0 1rem;
 }
 
@@ -330,6 +344,21 @@ body {
         flex-direction: column;
         align-items: flex-end;
         gap: 0.5rem;
+    }
+
+    .app-bar-left {
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .app-bar-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .banner-logo {
+        height: 36px; /* 窄屏幕时稍微降低logo高度 */
     }
 }
 
