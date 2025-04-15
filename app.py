@@ -112,7 +112,7 @@ def api_login():
 def review():
     if 'current_company_index' not in session:
         session['current_company_index'] = 0
-    return render_template('review.html')
+    return render_template('review.html', fallback_logo=Config.FALLBACK_LOGO_URL)
 
 @app.route('/api/companies')
 @login_required

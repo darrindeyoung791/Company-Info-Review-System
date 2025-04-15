@@ -43,3 +43,6 @@ class Config:
     SESSION_COOKIE_SECURE = not DEBUG  # 生产环境启用安全cookie
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
+    
+    # 资源配置
+    FALLBACK_LOGO_URL = os.getenv('FALLBACK_LOGO_URL')

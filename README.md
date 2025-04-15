@@ -30,7 +30,7 @@ A system designed for NCNU's internal operations, enabling enterprise informatio
 
 
 
-## 预览效果
+## 预览效果（第一版）
 
 ![image](https://github.com/user-attachments/assets/beb0d301-f2bb-4705-b4b0-59423452c89e)
 
@@ -50,10 +50,13 @@ A system designed for NCNU's internal operations, enabling enterprise informatio
 ├── README.md
 ├── requirements.txt       # 依赖文件
 ├── static/                # 静态文件
+│   ├── img/			   # 图像文件
+│   │   └── banner/        # 顶栏
+│   │       └── logo.png   # logo 图片
 │   ├── favicon.svg        # 标签页图片
 │   ├── styles.css         # 样式文件
-│   ├── login.js           # 登录页面的JavaScript文件
-│   └── review.js          # 审核页面的JavaScript文件
+│   ├── login.js           # 登录页面的 JavaScript 文件
+│   └── review.js          # 审核页面的 JavaScript 文件
 ├── templates/             # 网页页面
 │   ├── login.html         # 登录页面
 │   └── review.html        # 审核页面
@@ -207,3 +210,11 @@ python app.py
 更改 `.\static\styles.css` 中的颜色为对应的颜色即可，这个过程用 AI 处理会更方便。此处影响登录和审批页面的主题颜色。
 
 同时更改 `.\static\favicon.svg` 中更改 `fill="rgb(66 94 145)"`处的 RGB 数值为 `--primary-color` 的颜色。此处影响网站标签页的图标颜色。
+
+
+
+### 6. 变更顶栏 logo
+
+请更改 `.\static\img\banner\logo.png` 文件。推荐使用透明底色的图。
+
+如果图片不是 png 图像，请选择将 `.\templates\review.html` 中 `app-bar` 中的 `app-bar-left` 里的路径更改为对应的图像后缀名，或将你的图片转换格式为 png。
