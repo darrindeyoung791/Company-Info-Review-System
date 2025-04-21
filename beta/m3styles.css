@@ -1,0 +1,53 @@
+:root {
+    --mdui-color-primary-light: 103, 80, 164;
+    --mdui-color-primary-dark: 208, 188, 255;
+  }
+
+  #search-box {
+    width: 300px;
+    margin: 20px auto;
+  }
+  mdui-text-field{
+    width: 100%;
+  }
+
+
+  * {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+    background-color: var(--surface);
+    color: var(--on-surface);
+    line-height: 1.5;
+}
+
+.screen {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+h1{
+    font-size: xxx-large;
+    font-weight: 500;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+}
+
+.mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+code, pre {
+    font-family: 'JetBrains Mono', monospace;
+}

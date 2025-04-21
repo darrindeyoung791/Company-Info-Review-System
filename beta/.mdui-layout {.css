@@ -1,0 +1,15 @@
+.mdui-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.search-and-list {
+    background-color: var(--mdui-color-surface-container-low);
+}
+
+.company-card {
+    background-color: var(--mdui-color-surface);
+    border-radius: 16px;
+    box-shadow: var(--mdui-elevation-1);
+}

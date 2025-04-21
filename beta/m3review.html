@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业信息审核</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone" rel="stylesheet">
+    <link href="https://unpkg.com/mdui@2/mdui.css" rel="stylesheet">
+    <link href="/beta/m3styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+    <script src="/beta/script.js"></script>
+</head>
+
+<body>
+    <div id="review-app">
+        <mdui-navigation-rail contained value="home">
+            <mdui-fab lowered icon="logout" slot="top" value="logout"></mdui-fab>
+            <mdui-button-icon icon="help" slot="bottom" value="help"></mdui-button-icon>
+            <mdui-button-icon icon="settings" slot="bottom" value="settings"></mdui-button-icon>
+
+
+            <mdui-navigation-rail-item icon="manage_search" value="home">审核</mdui-navigation-rail-item>
+            <mdui-navigation-rail-item icon="work_history" value="progress">进度</mdui-navigation-rail-item>
+            <mdui-navigation-rail-item icon="account_circle" value="account">账户</mdui-navigation-rail-item>
+        </mdui-navigation-rail>
+        
+        <div style="display: flex; width: 100%;">
+            <div class="search-and-list" style="width: 360px; height: 100vh; border-right: 1px solid var(--mdui-color-outline-variant); display: flex; flex-direction: column;">
+                <div class="search" style="position: sticky; top: 0; background: var(--mdui-color-surface); padding: 16px; z-index: 2;">
+                    <mdui-text-field icon="search" label="搜索公司" style="width: 100%;">
+                        <mdui-button-icon slot="end-icon" icon="more_vert"></mdui-button-icon>
+                    </mdui-text-field>
+                </div>
+                <div class="list" style="flex: 1; overflow-y: auto; padding: 16px; background: var(--mdui-color-surface);">
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                    <mdui-card clickable style="width: 100%; height: auto">
+                        <div class="card-title" style="position: sticky; margin-left: 5%; margin-top: 5%;">
+                            <h2>银河电子科技</h2>
+                        </div>
+                        <div calss="card-info" style="position: sticky; margin-left: 5%; margin-top: 2%; margin-bottom: 5%;">
+                            <h4>已通过 | 2025/04/16 | Togawa Sakiko</h4>
+                        </div>
+                    </mdui-card>
+                </div>
+            </div>
+            
+            <div class="review-container" style="flex: 1; ; padding: 0px;">
+                <div class="review-content" style="padding: 24px; margin-top: 2%;">
+                    <h1>企业信息审核</h1>
+                    <h2>现在登录为 Togawa Sakiko</后>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
